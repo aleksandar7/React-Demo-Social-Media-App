@@ -4,7 +4,9 @@ import {SET_USER,
     //LOADING_UI, 
     SET_AUTHENTICATED, 
     SET_UNAUTHENTICATED,
-    LOADING_USER} from '../types';
+    LOADING_USER,
+  LIKE_SCREAM,
+  UNLIKE_SCREAM} from '../types';
     
 //import { bindActionCreators } from 'redux';
 
@@ -35,7 +37,25 @@ export default function(state = initialState, action) {
           ...state,
           loading: true
         }
-      default:
-        return state;
-    }
-  }
+        case LIKE_SCREAM:
+          return {
+            ...state,
+            likes: [
+              ...state.likes,
+              {
+                userHandle: state.credentials.handle,
+                screamId: action.payload.screamId
+              }
+            ]
+          };
+        case UNLIKE_SCREAM:
+          return {
+            ...state,
+            likes: state.likes.filter(
+              (like) => like.screamId !== action.payload.screamId
+            )
+          };
+        default:	    
+          return state;	     
+      }	  }
+    
